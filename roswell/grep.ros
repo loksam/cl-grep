@@ -1,0 +1,21 @@
+#!/bin/sh
+#|-*- mode:lisp -*-|#
+#|
+exec ros -Q -- $0 "$@"
+|#
+(progn ;;init forms
+  (ros:ensure-asdf)
+  #+quicklisp (ql:quickload '(:cl-ppcre) :silent t)
+  #+quicklisp (ql:quickload '(:cl-grep) :silent t)
+  )
+
+(defpackage :ros.script.ls.3720612639
+  (:use :cl))
+(in-package :ros.script.ls.3720612639)
+
+(defun main (&rest argv)
+  (declare (ignorable argv))
+  (if (>= (length argv) 2)
+      (with-open-file (in (second argv))
+        (cl-grep:grep (first argv) in *standard-output*))
+      (princ "invailed args")))
